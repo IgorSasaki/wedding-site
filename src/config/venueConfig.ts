@@ -9,7 +9,7 @@ export const VENUE_CONFIG = {
     time: "20h",
     // Link do Google Maps - substitua pelo link correto
     mapLink:
-      "google.com/maps/place/Basílica+São+Bento/@-21.7612093,-48.1299912,15z/data=!4m6!3m5!1s0x94b8f3e89df1a065:0x8f8aac6a84955b4f!8m2!3d-21.794881!4d-48.1763089!16s%2Fg%2F11bw77rc_7?entry=ttu&g_ep=EgoyMDI2MDEyNS4wIKXMDSoASAFQAw%3D%3D",
+      "https://www.google.com/maps/place/Basílica+São+Bento/@-21.7612093,-48.1299912,15z/data=!4m6!3m5!1s0x94b8f3e89df1a065:0x8f8aac6a84955b4f!8m2!3d-21.794881!4d-48.1763089!16s%2Fg%2F11bw77rc_7?entry=ttu&g_ep=EgoyMDI2MDEyNS4wIKXMDSoASAFQAw%3D%3D",
     // Instruções adicionais
     instructions:
       "Por gentileza, chegar com 30 minutos de antecedência para acomodação.",
