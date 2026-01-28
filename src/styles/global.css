@@ -1,0 +1,638 @@
+@import url("https://fonts.googleapis.com");
+@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lato:wght@300;400;500;600;700&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+  /* Fonte customizadas */
+  --font-sans: "Lato";
+  --font-serif: "Playfair Display";
+  --font-script: "Great Vibes";
+
+  /* Border radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+
+  /* Keyframes */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-fade-in-up: fade-in-up 0.6s ease-out;
+  --animate-fade-in: fade-in 0.5s ease-out;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-pulse-soft: pulse-soft 2s ease-in-out infinite;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes pulse-soft {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  /* Box Shadows */
+  --shadow-soft: 0 4px 20px -4px hsl(213 47% 24% / 0.1);
+  --shadow-card: 0 8px 30px -8px hsl(213 47% 24% / 0.12);
+  --shadow-elevated: 0 12px 40px -12px hsl(213 47% 24% / 0.15);
+}
+
+/* Variáveis CSS de cores */
+:root {
+  --radius: 0.75rem;
+
+  /* Cores principais - Baseadas no convite */
+  --background: hsl(210 20% 98%);
+  --foreground: hsl(213 47% 21%);
+
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(213 47% 21%);
+
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(213 47% 21%);
+
+  /* Azul Escuro - Títulos e textos principais */
+  --primary: hsl(213 47% 24%);
+  --primary-foreground: hsl(210 40% 98%);
+
+  /* Azul Aquarela Claro */
+  --secondary: hsl(211 43% 60%);
+  --secondary-foreground: hsl(0 0% 100%);
+
+  /* Azul Aquarela Suave */
+  --muted: hsl(210 47% 82%);
+  --muted-foreground: hsl(213 47% 30%);
+
+  /* Verde Acinzentado - Detalhes decorativos */
+  --accent: hsl(150 15% 54%);
+  --accent-foreground: hsl(0 0% 100%);
+
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(210 40% 98%);
+
+  --border: hsl(210 30% 88%);
+  --input: hsl(210 30% 88%);
+  --ring: hsl(213 47% 24%);
+
+  /* Cores extras para o tema de casamento */
+  --watercolor-blue: hsl(211 43% 60%);
+  --watercolor-light: hsl(210 47% 92%);
+  --sage-green: hsl(150 15% 54%);
+  --cream: hsl(40 33% 96%);
+  --gold: hsl(43 74% 49%);
+
+  /* Sidebar (mantido para compatibilidade) */
+  --sidebar-background: hsl(210 20% 98%);
+  --sidebar-foreground: hsl(213 47% 21%);
+  --sidebar-primary: hsl(213 47% 24%);
+  --sidebar-primary-foreground: hsl(0 0% 98%);
+  --sidebar-accent: hsl(210 47% 92%);
+  --sidebar-accent-foreground: hsl(213 47% 24%);
+  --sidebar-border: hsl(210 30% 88%);
+  --sidebar-ring: hsl(213 47% 24%);
+}
+
+.dark {
+  --background: hsl(213 47% 10%);
+  --foreground: hsl(210 40% 98%);
+
+  --card: hsl(213 47% 12%);
+  --card-foreground: hsl(210 40% 98%);
+
+  --popover: hsl(213 47% 12%);
+  --popover-foreground: hsl(210 40% 98%);
+
+  --primary: hsl(210 47% 82%);
+  --primary-foreground: hsl(213 47% 10%);
+
+  --secondary: hsl(211 43% 40%);
+  --secondary-foreground: hsl(210 40% 98%);
+
+  --muted: hsl(213 32% 20%);
+  --muted-foreground: hsl(210 30% 70%);
+
+  --accent: hsl(150 15% 40%);
+  --accent-foreground: hsl(210 40% 98%);
+
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(210 40% 98%);
+
+  --border: hsl(213 32% 20%);
+  --input: hsl(213 32% 20%);
+  --ring: hsl(210 47% 82%);
+
+  --sidebar-background: hsl(213 47% 8%);
+  --sidebar-foreground: hsl(210 40% 98%);
+  --sidebar-primary: hsl(210 47% 82%);
+  --sidebar-primary-foreground: hsl(213 47% 10%);
+  --sidebar-accent: hsl(213 32% 18%);
+  --sidebar-accent-foreground: hsl(210 40% 98%);
+  --sidebar-border: hsl(213 32% 20%);
+  --sidebar-ring: hsl(210 47% 82%);
+}
+
+/* Base styles */
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tipografia - Títulos elegantes */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-serif);
+}
+
+/* Fonte script para elementos especiais */
+.font-script {
+  font-family: var(--font-script);
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* Seções com espaçamento consistente */
+.section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+/* Container centralizado */
+.section-container {
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Título de seção elegante */
+.section-title {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-family: var(--font-serif);
+  color: var(--primary);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .section-title {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-title {
+    font-size: 3rem;
+    line-height: 1;
+  }
+}
+
+/* Subtítulo decorativo */
+.section-subtitle {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: var(--muted-foreground);
+  text-align: center;
+  margin-bottom: 3rem;
+  font-weight: 300;
+}
+
+@media (min-width: 768px) {
+  .section-subtitle {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+}
+
+/* Divisor decorativo com flores */
+.decorative-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.decorative-divider::before,
+.decorative-divider::after {
+  content: "";
+  height: 1px;
+  width: 4rem;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--secondary),
+    transparent
+  );
+}
+
+@media (min-width: 768px) {
+  .decorative-divider::before,
+  .decorative-divider::after {
+    width: 6rem;
+  }
+}
+
+/* Cards com estilo aquarela sutil */
+.watercolor-card {
+  background-color: var(--card);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .watercolor-card {
+    padding: 2rem;
+  }
+}
+
+.watercolor-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    hsl(210 47% 92% / 0.3) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+/* Botão principal estilizado */
+.btn-wedding {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 500;
+  transition: all 0.3s ease-out;
+}
+
+.btn-wedding:hover {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  transform: translateY(-2px);
+}
+
+.btn-wedding-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  font-weight: 500;
+  transition: all 0.3s ease-out;
+}
+
+.btn-wedding-outline:hover {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Animação de fade-in ao scroll */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(2rem);
+  transition: all 0.7s ease-out;
+}
+
+.fade-in-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Efeito de borda aquarela */
+.watercolor-border {
+  position: relative;
+}
+
+.watercolor-border::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    135deg,
+    hsl(211 43% 60% / 0.3) 0%,
+    hsl(150 15% 54% / 0.2) 50%,
+    hsl(211 43% 60% / 0.3) 100%
+  );
+  border-radius: inherit;
+  z-index: -1;
+  filter: blur(8px);
+}
+
+/* Badge de status */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-available {
+  background-color: hsl(150 15% 54% / 0.2);
+  color: hsl(150 30% 35%);
+}
+
+.status-gifted {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+/* Decoração floral nos cantos */
+.floral-corner {
+  position: relative;
+}
+
+.floral-corner::before,
+.floral-corner::after {
+  content: "";
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+/* Gradiente suave de fundo */
+.gradient-bg {
+  background: linear-gradient(
+    180deg,
+    var(--background) 0%,
+    hsl(210 47% 92% / 0.3) 50%,
+    var(--background) 100%
+  );
+}
+
+/* Texto com gradiente */
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animação suave de hover */
+.hover-lift {
+  transition: transform 0.3s ease-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* Texto balance para títulos */
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Esconder scrollbar mas manter funcionalidade */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Utilities para cores do tema - compatibilidade com classes Tailwind */
+.bg-background {
+  background-color: var(--background);
+}
+.bg-foreground {
+  background-color: var(--foreground);
+}
+.bg-card {
+  background-color: var(--card);
+}
+.bg-primary {
+  background-color: var(--primary);
+}
+.bg-secondary {
+  background-color: var(--secondary);
+}
+.bg-muted {
+  background-color: var(--muted);
+}
+.bg-accent {
+  background-color: var(--accent);
+}
+.bg-destructive {
+  background-color: var(--destructive);
+}
+.bg-popover {
+  background-color: var(--popover);
+}
+.bg-border {
+  background-color: var(--border);
+}
+
+.text-foreground {
+  color: var(--foreground);
+}
+.text-primary {
+  color: var(--primary);
+}
+.text-primary-foreground {
+  color: var(--primary-foreground);
+}
+.text-secondary {
+  color: var(--secondary);
+}
+.text-secondary-foreground {
+  color: var(--secondary-foreground);
+}
+.text-muted {
+  color: var(--muted);
+}
+.text-muted-foreground {
+  color: var(--muted-foreground);
+}
+.text-accent {
+  color: var(--accent);
+}
+.text-accent-foreground {
+  color: var(--accent-foreground);
+}
+.text-destructive {
+  color: var(--destructive);
+}
+.text-destructive-foreground {
+  color: var(--destructive-foreground);
+}
+.text-card-foreground {
+  color: var(--card-foreground);
+}
+.text-popover-foreground {
+  color: var(--popover-foreground);
+}
+
+.border-border {
+  border-color: var(--border);
+}
+.border-input {
+  border-color: var(--input);
+}
+.border-primary {
+  border-color: var(--primary);
+}
+.border-secondary {
+  border-color: var(--secondary);
+}
+.border-muted {
+  border-color: var(--muted);
+}
+.border-accent {
+  border-color: var(--accent);
+}
+.border-destructive {
+  border-color: var(--destructive);
+}
+
+.ring-ring {
+  --tw-ring-color: var(--ring);
+}
+.ring-primary {
+  --tw-ring-color: var(--primary);
+}
+
+.shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+.shadow-card {
+  box-shadow: var(--shadow-card);
+}
+.shadow-elevated {
+  box-shadow: var(--shadow-elevated);
+}
+
+/* Ring offset para foco */
+.ring-offset-background {
+  --tw-ring-offset-color: var(--background);
+}
+
+/* Cores watercolor e extras */
+.bg-watercolor-blue {
+  background-color: var(--watercolor-blue);
+}
+.bg-watercolor-light {
+  background-color: var(--watercolor-light);
+}
+.bg-sage {
+  background-color: var(--sage-green);
+}
+.bg-cream {
+  background-color: var(--cream);
+}
+.bg-gold {
+  background-color: var(--gold);
+}
+
+.text-watercolor-blue {
+  color: var(--watercolor-blue);
+}
+.text-sage {
+  color: var(--sage-green);
+}
+.text-cream {
+  color: var(--cream);
+}
+.text-gold {
+  color: var(--gold);
+}
