@@ -3,6 +3,7 @@ import React from "react";
 import { Navigation } from "@/components/Navigation";
 
 import { FAQ } from "./_components/FAQ";
+import { GiftsSection } from "./_components/Gifts";
 import { HeroHeader } from "./_components/HeroHeader";
 import { Messages } from "./_components/Messages";
 import { OurStory } from "./_components/OurStory";
@@ -18,7 +19,7 @@ export const HomePage: React.FC = () => {
         <HeroHeader />
         <OurStory />
         <WeddingDetails />
-
+        <GiftsSection />
         <Messages />
         <ReserveConfirm />
         <FAQ />
