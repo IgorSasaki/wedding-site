@@ -4,24 +4,24 @@ import { TIMELINE_CONFIG } from "@/config/timelineConfig";
 
 export const OurStory = () => {
   return (
-    <section id="historia" className="section gradient-bg">
+    <section className="section gradient-bg" id="historia">
       <div className="section-container">
         <SectionTitle
-          title="Nossa História"
           subtitle="Cada momento nos trouxe até aqui"
+          title="Nossa História"
         />
 
         <div className="max-w-4xl mx-auto space-y-12 md:space-y-16">
           {TIMELINE_CONFIG.map((event, index) => (
             <TimelineItem
-              key={event.id}
               event={event}
               index={index}
               isLast={index === TIMELINE_CONFIG.length - 1}
+              key={event.id}
             />
           ))}
         </div>
       </div>
     </section>
   );
-}
+};

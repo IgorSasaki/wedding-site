@@ -1,16 +1,16 @@
-import { SectionTitle } from "@/components/SectionTitle"
-import { Card, CardContent } from "@/components/ui/card"
-import { SITE_CONFIG } from "@/config/siteConfig"
-import { MessageCircle, Phone } from "lucide-react"
+import { MessageCircle, Phone } from "lucide-react";
+
+import { SectionTitle } from "@/components/SectionTitle";
+import { Card, CardContent } from "@/components/ui/card";
+import { SITE_CONFIG } from "@/config/siteConfig";
 
 export const ReserveConfirm = () => {
   return (
-
-    <section id="rsvp" className="section gradient-bg">
+    <section className="section gradient-bg" id="rsvp">
       <div className="section-container">
         <SectionTitle
-          title={SITE_CONFIG.rsvp.title}
           subtitle="Queremos muito contar com sua presença"
+          title={SITE_CONFIG.rsvp.title}
         />
 
         <div className="max-w-2xl mx-auto">
@@ -26,12 +26,14 @@ export const ReserveConfirm = () => {
 
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary">
                 <MessageCircle className="w-4 h-4" />
-                <span className="font-medium">{SITE_CONFIG.rsvp.contactName}</span>
+                <span className="font-medium">
+                  {SITE_CONFIG.rsvp.contactName}
+                </span>
               </div>
             </CardContent>
           </Card>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};

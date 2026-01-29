@@ -1,14 +1,15 @@
-import globals from "globals";
-import js from "@eslint/js";
-import tsParser from "@typescript-eslint/parser";
-import tsPlugin from "@typescript-eslint/eslint-plugin";
+import importHelpersPlugin from "eslint-plugin-import-helpers";
+import perfectionistPlugin from "eslint-plugin-perfectionist";
+import prettierPlugin from "eslint-plugin-prettier";
 import reactPlugin from "eslint-plugin-react";
 import reactHooksPlugin from "eslint-plugin-react-hooks";
-import prettierPlugin from "eslint-plugin-prettier";
-import importHelpersPlugin from "eslint-plugin-import-helpers";
-import unusedImportsPlugin from "eslint-plugin-unused-imports";
-import perfectionistPlugin from "eslint-plugin-perfectionist";
 import svgJsxPlugin from "eslint-plugin-svg-jsx";
+import unusedImportsPlugin from "eslint-plugin-unused-imports";
+import globals from "globals";
+
+import js from "@eslint/js";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
+import tsParser from "@typescript-eslint/parser";
 
 export default [
   js.configs.recommended,
@@ -42,7 +43,7 @@ export default [
       ...reactHooksPlugin.configs.recommended.rules,
       "react/react-in-jsx-scope": "off", // Vite não precisa de React importado no topo
       "react/prop-types": "off",
-      "camelcase": "off",
+      camelcase: "off",
       "space-before-function-paren": "off",
     },
     settings: {
@@ -71,14 +72,14 @@ export default [
       "import-helpers/order-imports": [
         "warn",
         {
-          "newlinesBetween": "always",
-          "groups": [
+          newlinesBetween: "always",
+          groups: [
             ["module", "/^react/", "/^@ant/", "/^@fullstory/"],
             "/^@/",
-            ["parent", "sibling", "index"]
+            ["parent", "sibling", "index"],
           ],
-          "alphabetize": { "order": "asc", "ignoreCase": true }
-        }
+          alphabetize: { order: "asc", ignoreCase: true },
+        },
       ],
       "sort-imports": "off",
     },
@@ -94,11 +95,11 @@ export default [
       "unused-imports/no-unused-vars": [
         "warn",
         {
-          "vars": "all",
-          "varsIgnorePattern": "^_",
-          "args": "none",
-          "argsIgnorePattern": "^_"
-        }
+          vars: "all",
+          varsIgnorePattern: "^_",
+          args: "none",
+          argsIgnorePattern: "^_",
+        },
       ],
     },
   },
@@ -113,10 +114,10 @@ export default [
       "perfectionist/sort-jsx-props": [
         "error",
         {
-          "type": "natural",
-          "order": "asc",
-          "groups": ["multiline", "unknown", "shorthand"]
-        }
+          type: "natural",
+          order: "asc",
+          groups: ["multiline-prop", "unknown", "shorthand-prop"],
+        },
       ],
     },
   },
@@ -160,11 +161,11 @@ export default [
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
-          "vars": "all",
-          "varsIgnorePattern": "^_",
-          "args": "none",
-          "argsIgnorePattern": "^_"
-        }
+          vars: "all",
+          varsIgnorePattern: "^_",
+          args: "none",
+          argsIgnorePattern: "^_",
+        },
       ],
     },
   },

@@ -1,14 +1,13 @@
+import { Church, MapPin, Clock, AlertCircle, Shirt } from "lucide-react";
+
 import { SectionTitle } from "@/components/SectionTitle";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Church, PartyPopper, MapPin, Clock, AlertCircle, Shirt } from "lucide-react";
-import { VenueCardProps } from "./types";
-import { ICON_MAP } from "./data";
-import { VENUE_CONFIG } from "@/config/venueConfig";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SITE_CONFIG } from "@/config/siteConfig";
+import { VENUE_CONFIG } from "@/config/venueConfig";
 
-
-
+import { ICON_MAP } from "./data";
+import { VenueCardProps } from "./types";
 
 const VenueCard = ({
   title,
@@ -37,7 +36,9 @@ const VenueCard = ({
           <MapPin className="w-4 h-4 mt-1 shrink-0" />
           <div className="text-sm">
             <p>{address}</p>
-            <p>{neighborhood} – {city}</p>
+            <p>
+              {neighborhood} – {city}
+            </p>
           </div>
         </div>
 
@@ -53,12 +54,8 @@ const VenueCard = ({
           </div>
         )}
 
-        <Button
-          variant="outline"
-          className="mt-4"
-          asChild
-        >
-          <a href={mapLink} target="_blank" rel="noopener noreferrer">
+        <Button className="mt-4" variant="outline" asChild>
+          <a href={mapLink} rel="noopener noreferrer" target="_blank">
             <MapPin className="w-4 h-4 mr-2" />
             Ver no Mapa
           </a>
@@ -70,36 +67,36 @@ const VenueCard = ({
 
 export const WeddingDetails = () => {
   return (
-    <section id="detalhes" className="section">
+    <section className="section" id="detalhes">
       <div className="section-container">
         <SectionTitle
-          title="Detalhes do Casamento"
           subtitle="Todas as informações para você celebrar conosco"
+          title="Detalhes do Casamento"
         />
 
         {/* Venue Cards */}
         <div className="grid md:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto mb-12">
           <VenueCard
-            title={VENUE_CONFIG.ceremony.title}
-            name={VENUE_CONFIG.ceremony.name}
             address={VENUE_CONFIG.ceremony.address}
-            neighborhood={VENUE_CONFIG.ceremony.neighborhood}
             city={VENUE_CONFIG.ceremony.city}
-            time={VENUE_CONFIG.ceremony.time}
+            iconName={VENUE_CONFIG.ceremony.icon}
             instructions={VENUE_CONFIG.ceremony.instructions}
             mapLink={VENUE_CONFIG.ceremony.mapLink}
-            iconName={VENUE_CONFIG.ceremony.icon}
+            name={VENUE_CONFIG.ceremony.name}
+            neighborhood={VENUE_CONFIG.ceremony.neighborhood}
+            time={VENUE_CONFIG.ceremony.time}
+            title={VENUE_CONFIG.ceremony.title}
           />
           <VenueCard
-            title={VENUE_CONFIG.reception.title}
-            name={VENUE_CONFIG.reception.name}
             address={VENUE_CONFIG.reception.address}
-            neighborhood={VENUE_CONFIG.reception.neighborhood}
             city={VENUE_CONFIG.reception.city}
-            time={VENUE_CONFIG.reception.time}
+            iconName={VENUE_CONFIG.reception.icon}
             instructions={VENUE_CONFIG.reception.instructions}
             mapLink={VENUE_CONFIG.reception.mapLink}
-            iconName={VENUE_CONFIG.reception.icon}
+            name={VENUE_CONFIG.reception.name}
+            neighborhood={VENUE_CONFIG.reception.neighborhood}
+            time={VENUE_CONFIG.reception.time}
+            title={VENUE_CONFIG.reception.title}
           />
         </div>
 
