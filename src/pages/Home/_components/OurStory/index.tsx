@@ -1,9 +1,11 @@
+import React from "react";
+
 import { FadeSection } from "@/components/animations/FadeSection";
 import { SectionTitle } from "@/components/SectionTitle";
 import { TimelineItem } from "@/components/TimelineItem";
 import { TIMELINE_CONFIG } from "@/config/timelineConfig";
 
-export const OurStory = () => {
+export const OurStory: React.FC = () => {
   return (
     <section className="section gradient-bg" id="historia">
       <div className="section-container">
