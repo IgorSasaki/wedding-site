@@ -10,7 +10,7 @@ export const TIMELINE_CONFIG: TimelineEvent[] = [
   {
     id: "first-meet",
     title: "Nos Conhecemos",
-    date: "2016",
+    date: "2019",
     description:
       "Foi num dia comum que nossos olhares se cruzaram pela primeira vez. O que parecia ser um encontro casual se transformou no início de uma linda história de amor.",
     icon: "Sparkles",
@@ -18,7 +18,7 @@ export const TIMELINE_CONFIG: TimelineEvent[] = [
   {
     id: "first-date",
     title: "Primeiro Encontro",
-    date: "Maio de 2016",
+    date: "2019",
     description:
       "Nosso primeiro encontro foi mágico. Horas de conversa, risadas e a certeza de que algo especial estava nascendo entre nós.",
     icon: "Heart",
@@ -26,7 +26,7 @@ export const TIMELINE_CONFIG: TimelineEvent[] = [
   {
     id: "dating",
     title: "Início do Namoro",
-    date: "Dezembro de 2016",
+    date: "2019",
     description:
       "Com borboletas no estômago e o coração acelerado, oficializamos nosso namoro. Era o começo de uma jornada que só ficaria mais bonita.",
     icon: "HeartHandshake",
