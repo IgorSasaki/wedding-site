@@ -20,7 +20,8 @@ export const WeddingDetails: React.FC = () => {
       <div className="section-container">
         <FadeSection>
           <SectionTitle
-            subtitle="Todas as informações para você celebrar conosco"
+            subtitle="Preparamos tudo com muito carinho e ficaremos felizes em celebrar esse momento ao seu lado.
+Abaixo você encontra as informações sobre a cerimônia e a recepção."
             title="Detalhes do Casamento"
           />
         </FadeSection>

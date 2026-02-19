@@ -41,5 +41,5 @@ export const GIFTS_INTRO_TEXT = {
   title: "Lista de Presentes",
   subtitle: "Sua presença é o nosso maior presente!",
   description:
-    "Preparamos esta lista com carinho, mas ela é apenas uma sugestão. O mais importante para nós é ter você ao nosso lado neste dia especial. Se desejar nos presentear, escolha o que couber no seu coração. 💙",
+    "Sua presença é o nosso maior presente. Mas, se desejar nos presentear, preparamos com carinho uma lista com itens que vão fazer parte do nosso novo lar. Você pode escolher o que preferir – cada gesto de carinho fará parte da nossa história.",
 };

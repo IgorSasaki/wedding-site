@@ -238,7 +238,7 @@ export const HeroHeader: React.FC = () => {
             onClick={() => handleScroll("#detalhes")}
           >
             <Calendar className="w-4 h-4" />
-            Ver Detalhes
+            Ver detalhes do casamento
           </Button>
           <Button
             className="btn-wedding-outline min-w-[200px]"
@@ -246,7 +246,7 @@ export const HeroHeader: React.FC = () => {
             variant="outline"
           >
             <Gift className="w-4 h-4" />
-            Lista de Presentes
+            Ir para a lista de presentes
           </Button>
         </motion.div>
       </div>

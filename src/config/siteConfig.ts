@@ -54,8 +54,9 @@ export const SITE_CONFIG = {
 
   // Configurações da seção de mensagens
   messages: {
-    title: "Deixe sua Mensagem",
-    subtitle: "Compartilhe seu carinho e bons desejos para nós",
+    title: "Mensagens para o casal",
+    subtitle:
+      "Queremos guardar para sempre as palavras e orações daqueles que caminham conosco. Deixe aqui sua mensagem, conselho, versículo ou o que Deus colocar no seu coração.Será uma alegria ler cada recado.",
     placeholder: "Escreva aqui sua mensagem de carinho para os noivos...",
   },
 };

@@ -11,7 +11,8 @@ export const OurStory: React.FC = () => {
       <div className="section-container">
         <FadeSection>
           <SectionTitle
-            subtitle="Cada momento nos trouxe até aqui"
+            subtitle="Deus escreveu nossa história com cuidado, em cada encontro, conversa e recomeço.
+Aqui estão alguns dos capítulos mais especiais até chegarmos ao “sim” de 25 de julho de 2026."
             title="Nossa História"
           />
         </FadeSection>
