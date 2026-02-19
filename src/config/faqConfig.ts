@@ -9,7 +9,7 @@ export const FAQ_CONFIG: FAQItem[] = [
     id: "acompanhante",
     question: "Posso levar acompanhante?",
     answer:
-      "Caso seu convite esteja endereçado com 'e família' ou traga o nome do acompanhante, ele ou ela é muito bem-vindo(a). Se tiver dúvida sobre quem está incluído no convite, fale conosco com carinho.",
+      "Para que possamos receber todos com conforto, pedimos que sigam o que está indicado no convite. Se o seu convite estiver endereçado apenas a você ou a você e seu marido/esposa, ou a você e sua família, isso significa que essas são as pessoas incluídas. Caso tenha qualquer dúvida sobre quem está convidado, pode falar conosco com carinho.",
   },
   {
     id: "criancas",
@@ -33,7 +33,7 @@ export const FAQ_CONFIG: FAQItem[] = [
     id: "traje",
     question: "Qual é o traje sugerido?",
     answer:
-      "Sugerimos traje esporte fino ou passeio completo. Pedimos apenas que evitem a cor branca e tons muito claros de bege ou off-white, que são reservados para a noiva. 💙",
+      "Sugerimos traje esporte fino ou passeio completo. As madrinhas estarão de azul, mas você pode escolher a cor que preferir, desde que não seja branco, bege ou off-white — essas tonalidades são reservadas para a noiva. O mais importante é que você se sinta confortável e à vontade para celebrar conosco!",
   },
   {
     id: "fotos",
