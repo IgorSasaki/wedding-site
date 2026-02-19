@@ -25,13 +25,13 @@ export const CATEGORY_ICONS: Record<
 };
 
 export const PRIORITY_COLORS: Record<string, string> = {
-  alta: "bg-primary text-primary-foreground",
-  média: "bg-secondary text-secondary-foreground",
-  baixa: "bg-accent text-accent-foreground",
+  essencial: "bg-primary text-primary-foreground",
+  importante: "bg-secondary text-secondary-foreground",
+  desejo: "bg-accent text-accent-foreground",
 };
 
 export const PRIORITY_LABELS: Record<string, string> = {
-  alta: "Essencial",
-  média: "Importante",
-  baixa: "Desejo",
+  essencial: "Essencial",
+  importante: "Importante",
+  desejo: "Desejo",
 };
