@@ -1,7 +1,6 @@
 import { airtableClient } from "./airtableClient";
 
 export interface Message {
-  approved?: boolean;
   dateTime: string;
   email?: string;
   id: string;
@@ -17,15 +16,22 @@ class MessagesServiceClass {
   private endpoint = "/messages";
 
   async getAll(): Promise<Message[]> {
-    const { data } = await airtableClient.get<Message[]>(this.endpoint);
-    return data;
+    const { data } = await airtableClient.get(this.endpoint);
+
+    return data.records.map((r) => ({
+      ...r.fields,
+      id: r.id,
+      dateTime: r.createdTime,
+    }));
   }
 
   async create(messageData: CreateMessageData): Promise<Message> {
     const { data } = await airtableClient.post<Message>(this.endpoint, {
-      name: messageData.name,
-      email: messageData.email || null,
-      message: messageData.message,
+      records: [
+        {
+          fields: messageData,
+        },
+      ],
     });
     return data;
   }
