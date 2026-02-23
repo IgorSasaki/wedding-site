@@ -1,4 +1,4 @@
-import { Heart, Loader2, Send } from "lucide-react";
+import { AlertCircle, Heart, Loader2, RefreshCw, Send } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -23,14 +23,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { SITE_CONFIG } from "@/config/siteConfig";
 import { useToast } from "@/hooks/useToast";
+import { Message, MessagesService } from "@/services/api/MessagesService";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { MessageFormData, messageSchema } from "./schemas";
 
 export const Messages: React.FC = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
   const form = useForm<MessageFormData>({
@@ -42,30 +44,37 @@ export const Messages: React.FC = () => {
     },
   });
 
+  const loadMessages = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await MessagesService.getAll();
+      setMessages(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Erro ao carregar mensagens:", err);
+      setError("Não foi possível carregar as mensagens. Tente novamente.");
+      setMessages([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const loadMessages = async () => {
-      try {
-        setMessages([]);
-      } catch (error) {
-        console.error({ loadMessagesError: error });
-      } finally {
-        setIsLoading(false);
-      }
-    };
     loadMessages();
   }, []);
 
   const onSubmit = async (data: MessageFormData) => {
     setIsSubmitting(true);
-
     try {
-      const newMessage = {
+      const newMessage = await MessagesService.create({
         name: data.name,
         email: data.email || undefined,
         message: data.message,
-      };
+      });
 
-      setMessages((prev) => [newMessage, ...prev]);
+      if (newMessage && typeof newMessage === "object") {
+        setMessages((prev) => [newMessage, ...prev]);
+      }
       form.reset();
 
       toast({
@@ -73,8 +82,8 @@ export const Messages: React.FC = () => {
         description:
           "Obrigado pelo carinho! Sua mensagem significa muito para nós.",
       });
-    } catch (error) {
-      console.error({ onSubmitError: error });
+    } catch (err) {
+      console.error("Erro ao enviar mensagem:", err);
 
       toast({
         title: "Erro ao enviar",
@@ -86,27 +95,7 @@ export const Messages: React.FC = () => {
     }
   };
 
-  const formatMessageDate = (dateTime: string): string => {
-    const date = new Date(dateTime);
-    const now = new Date();
-    const diffDays = Math.floor(
-      (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
-    );
-
-    if (diffDays === 0) {
-      return "Hoje";
-    } else if (diffDays === 1) {
-      return "Ontem";
-    } else if (diffDays < 7) {
-      return `${diffDays} dias atrás`;
-    } else {
-      return date.toLocaleDateString("pt-BR", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      });
-    }
-  };
+  const messageCount = Array.isArray(messages) ? messages.length : 0;
 
   return (
     <section className="section" id="mensagens">
@@ -119,7 +108,6 @@ export const Messages: React.FC = () => {
         </FadeSection>
 
         <div className="max-w-4xl mx-auto">
-          {/* Form */}
           <FadeSection delay={0.2} direction="up">
             <div className="watercolor-card p-6 md:p-8 mb-12">
               <Form {...form}>
@@ -198,29 +186,51 @@ export const Messages: React.FC = () => {
             </div>
           </FadeSection>
 
-          {/* Messages List */}
           <FadeSection delay={0.3}>
             <div className="flex items-center gap-2 mb-6">
               <Heart className="w-5 h-5 text-secondary" />
               <h3 className="font-serif text-xl text-primary">
-                Mural de Mensagens ({messages.length})
+                Mural de Mensagens ({messageCount})
               </h3>
             </div>
 
-            {isLoading ? (
+            {isLoading && (
               <div className="text-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-secondary mx-auto" />
+                <Loader2 className="w-10 h-10 animate-spin text-secondary mx-auto mb-4" />
+                <p className="text-muted-foreground">Carregando mensagens...</p>
               </div>
-            ) : messages.length === 0 ? (
+            )}
+
+            {!isLoading && error && (
+              <div className="text-center py-12">
+                <div className="watercolor-card max-w-md mx-auto p-6">
+                  <AlertCircle className="w-10 h-10 text-destructive mx-auto mb-4" />
+                  <p className="text-muted-foreground mb-4">{error}</p>
+                  <Button
+                    className="gap-2"
+                    onClick={loadMessages}
+                    variant="outline"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                    Tentar novamente
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {!isLoading && !error && messageCount === 0 && (
               <div className="text-center py-12 text-muted-foreground">
+                <Heart className="w-12 h-12 mx-auto mb-4 opacity-30" />
                 <p>Seja o primeiro a deixar uma mensagem!</p>
               </div>
-            ) : (
+            )}
+
+            {!isLoading && !error && messageCount > 0 && (
               <StaggerContainer className="grid gap-4" staggerDelay={0.1}>
                 {messages.map((msg) => (
                   <StaggerItem key={msg.id} variants={STAGGER_VARIANT_ITEMS}>
                     <MessageCard
-                      date={formatMessageDate(msg.dateTime)}
+                      date={MessagesService.formatDate(msg.dateTime)}
                       message={msg.message}
                       name={msg.name}
                     />

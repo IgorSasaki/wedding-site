@@ -6,7 +6,7 @@ export const MessageCard = ({ name, message, date }: MessageCardProps) => {
       <div className="flex items-start gap-4">
         <div className="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
           <span className="text-secondary font-serif text-lg">
-            {name.charAt(0).toUpperCase()}
+            {name?.charAt(0).toUpperCase()}
           </span>
         </div>
         <div className="flex-1 min-w-0">
