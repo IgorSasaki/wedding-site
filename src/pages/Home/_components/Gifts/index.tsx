@@ -1,4 +1,11 @@
-import { Heart, Loader2, RefreshCw, AlertCircle } from "lucide-react";
+import {
+  Heart,
+  Loader2,
+  RefreshCw,
+  AlertCircle,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import React, { useState, useEffect, useMemo } from "react";
 
 import { FadeSection } from "@/components/animations/FadeSection";
@@ -15,12 +22,15 @@ import {
 import { useToast } from "@/hooks/useToast";
 import { GiftsService } from "@/services/api/GiftsService";
 
+const GIFTS_PER_PAGE = 9;
+
 export const GiftsSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<
     GIFT_CATEGORIES | "todas"
   >("todas");
   const [showOnlyAvailable, setShowOnlyAvailable] = useState(false);
-  const [gifts, setGifts] = useState<Gift[]>([]);
+  const [allGifts, setAllGifts] = useState<Gift[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
@@ -30,14 +40,13 @@ export const GiftsSection: React.FC = () => {
     setError(null);
     try {
       const data = await GiftsService.getAll();
-
-      setGifts(Array.isArray(data) ? data : []);
+      setAllGifts(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Erro ao carregar presentes:", err);
       setError(
         "Não foi possível carregar a lista de presentes. Tente novamente.",
       );
-      setGifts([]);
+      setAllGifts([]);
     } finally {
       setIsLoading(false);
     }
@@ -47,17 +56,21 @@ export const GiftsSection: React.FC = () => {
     loadGifts();
   }, []);
 
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, showOnlyAvailable]);
+
   const handleMarkAsGiven = async (giftId: string, giftedBy: string) => {
     try {
       await GiftsService.markAsGiven(giftId, giftedBy);
-
       await loadGifts();
       toast({
         title: "Presente marcado! 🎁",
         description: "Obrigado pela generosidade! O casal ficará muito feliz.",
       });
-    } catch (error) {
-      console.error("Erro ao marcar o presente:", error);
+    } catch (err) {
+      console.error("Erro ao marcar o presente:", err);
       toast({
         title: "Erro",
         description: "Não foi possível marcar o presente. Tente novamente.",
@@ -67,18 +80,71 @@ export const GiftsSection: React.FC = () => {
   };
 
   const filteredGifts = useMemo(() => {
-    if (!Array.isArray(gifts)) return [];
-    return gifts.filter((gift) => {
+    if (!Array.isArray(allGifts)) return [];
+    return allGifts.filter((gift) => {
       const categoryMatch =
         selectedCategory === "todas" || gift.category === selectedCategory;
       const statusMatch = !showOnlyAvailable || gift.available;
       return categoryMatch && statusMatch;
     });
-  }, [gifts, selectedCategory, showOnlyAvailable]);
+  }, [allGifts, selectedCategory, showOnlyAvailable]);
 
-  const availableCount = Array.isArray(gifts)
-    ? gifts.filter((g) => g.available).length
+  // Paginação local: total de páginas e fatia da lista filtrada
+  const totalPages = Math.ceil(filteredGifts.length / GIFTS_PER_PAGE);
+  const paginatedGifts = useMemo(() => {
+    const start = (currentPage - 1) * GIFTS_PER_PAGE;
+    return filteredGifts.slice(start, start + GIFTS_PER_PAGE);
+  }, [filteredGifts, currentPage]);
+
+  const availableCount = Array.isArray(allGifts)
+    ? allGifts.filter((g) => g.available).length
     : 0;
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+    document
+      .getElementById("presentes")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const renderPaginationButtons = () => {
+    const pages: (number | "ellipsis")[] = [];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (currentPage > 3) pages.push("ellipsis");
+      for (
+        let i = Math.max(2, currentPage - 1);
+        i <= Math.min(totalPages - 1, currentPage + 1);
+        i++
+      ) {
+        pages.push(i);
+      }
+      if (currentPage < totalPages - 2) pages.push("ellipsis");
+      pages.push(totalPages);
+    }
+
+    return pages.map((p, idx) =>
+      p === "ellipsis" ? (
+        <span className="px-2 text-muted-foreground" key={`ellipsis-${idx}`}>
+          …
+        </span>
+      ) : (
+        <Button
+          className={
+            currentPage === p ? "bg-primary text-primary-foreground" : ""
+          }
+          key={p}
+          onClick={() => goToPage(p)}
+          size="sm"
+          variant={currentPage === p ? "default" : "outline"}
+        >
+          {p}
+        </Button>
+      ),
+    );
+  };
 
   return (
     <section className="section gradient-bg" id="presentes">
@@ -167,22 +233,59 @@ export const GiftsSection: React.FC = () => {
           </FadeSection>
         )}
 
-        {/* Gifts Grid */}
-        {!isLoading && !error && filteredGifts.length > 0 && (
-          <StaggerContainer
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
-            staggerDelay={0.08}
-          >
-            {filteredGifts.map((gift) => (
-              // <StaggerItem key={gift.id} variants={STAGGER_VARIANT_ITEMS}>
-              <GiftCard
-                gift={gift}
-                key={gift.id}
-                onMarkAsGiven={handleMarkAsGiven}
-              />
-              // </StaggerItem>
-            ))}
-          </StaggerContainer>
+        {!isLoading && !error && paginatedGifts.length > 0 && (
+          <>
+            <StaggerContainer
+              className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+              staggerDelay={0.08}
+            >
+              {paginatedGifts.map((gift) => (
+                <GiftCard
+                  gift={gift}
+                  key={gift.id}
+                  onMarkAsGiven={handleMarkAsGiven}
+                />
+              ))}
+            </StaggerContainer>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-10">
+                <Button
+                  className="gap-1"
+                  disabled={currentPage === 1}
+                  onClick={() => goToPage(currentPage - 1)}
+                  size="sm"
+                  variant="outline"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  Anterior
+                </Button>
+
+                <div className="flex items-center gap-1">
+                  {renderPaginationButtons()}
+                </div>
+
+                <Button
+                  className="gap-1"
+                  disabled={currentPage === totalPages}
+                  onClick={() => goToPage(currentPage + 1)}
+                  size="sm"
+                  variant="outline"
+                >
+                  Próximo
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+            )}
+
+            {/* Page info */}
+            <p className="text-center text-xs text-muted-foreground mt-3">
+              Mostrando {(currentPage - 1) * GIFTS_PER_PAGE + 1}–
+              {Math.min(currentPage * GIFTS_PER_PAGE, filteredGifts.length)} de{" "}
+              {filteredGifts.length} presentes
+            </p>
+          </>
         )}
 
         {/* Empty State */}
@@ -190,7 +293,7 @@ export const GiftsSection: React.FC = () => {
           <FadeSection>
             <div className="text-center py-12">
               <p className="text-muted-foreground">
-                {gifts.length === 0
+                {allGifts.length === 0
                   ? "Nenhum presente cadastrado ainda."
                   : "Nenhum presente encontrado com os filtros selecionados."}
               </p>
