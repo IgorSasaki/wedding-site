@@ -12,17 +12,39 @@ export type CreateMessageData = Pick<Message, "name" | "message"> & {
   email?: string;
 };
 
+interface AirtableMessagesResponse {
+  offset?: string;
+  records: Array<{
+    createdTime?: string;
+    fields: Record<string, unknown>;
+    id: string;
+  }>;
+}
+
 class MessagesServiceClass {
   private endpoint = "/messages";
 
   async getAll(): Promise<Message[]> {
-    const { data } = await airtableClient.get(this.endpoint);
+    const allRecords: Message[] = [];
+    let offset: string | undefined;
 
-    return data.records.map((r) => ({
-      ...r.fields,
-      id: r.id,
-      dateTime: r.createdTime,
-    }));
+    do {
+      const { data } = await airtableClient.get<AirtableMessagesResponse>(
+        this.endpoint,
+        { params: offset ? { offset } : {} },
+      );
+
+      const page = (data.records ?? []).map((r) => ({
+        ...r.fields,
+        id: r.id,
+        dateTime: r.createdTime ?? "",
+      })) as Message[];
+
+      allRecords.push(...page);
+      offset = data.offset;
+    } while (offset);
+
+    return allRecords;
   }
 
   async create(messageData: CreateMessageData): Promise<Message> {
