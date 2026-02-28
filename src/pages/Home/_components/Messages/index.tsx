@@ -1,13 +1,17 @@
-import { AlertCircle, Heart, Loader2, RefreshCw, Send } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import {
+  AlertCircle,
+  ChevronLeft,
+  ChevronRight,
+  Heart,
+  Loader2,
+  RefreshCw,
+  Send,
+} from "lucide-react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { FadeSection } from "@/components/animations/FadeSection";
-import {
-  StaggerContainer,
-  StaggerItem,
-} from "@/components/animations/StaggerContainer";
-import { STAGGER_VARIANT_ITEMS } from "@/components/animations/StaggerContainer/data";
+import { StaggerContainer } from "@/components/animations/StaggerContainer";
 import { MessageCard } from "@/components/MessageCard";
 import { SectionTitle } from "@/components/SectionTitle";
 import { Button } from "@/components/ui/button";
@@ -28,8 +32,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { MessageFormData, messageSchema } from "./schemas";
 
+const MESSAGES_PER_PAGE = 6;
+
 export const Messages: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [allMessages, setAllMessages] = useState<Message[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,11 +44,7 @@ export const Messages: React.FC = () => {
 
   const form = useForm<MessageFormData>({
     resolver: zodResolver(messageSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      message: "",
-    },
+    defaultValues: { name: "", email: "", message: "" },
   });
 
   const loadMessages = async () => {
@@ -49,11 +52,11 @@ export const Messages: React.FC = () => {
     setError(null);
     try {
       const data = await MessagesService.getAll();
-      setMessages(Array.isArray(data) ? data : []);
+      setAllMessages(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Erro ao carregar mensagens:", err);
       setError("Não foi possível carregar as mensagens. Tente novamente.");
-      setMessages([]);
+      setAllMessages([]);
     } finally {
       setIsLoading(false);
     }
@@ -73,7 +76,8 @@ export const Messages: React.FC = () => {
       });
 
       if (newMessage && typeof newMessage === "object") {
-        setMessages((prev) => [newMessage, ...prev]);
+        setAllMessages((prev) => [newMessage, ...prev]);
+        setCurrentPage(1); // Go to first page to show new message
       }
       form.reset();
 
@@ -95,7 +99,59 @@ export const Messages: React.FC = () => {
     }
   };
 
-  const messageCount = Array.isArray(messages) ? messages.length : 0;
+  const totalMessages = allMessages.length;
+  // Paginação local: total de páginas e fatia da lista
+  const totalPages = Math.ceil(totalMessages / MESSAGES_PER_PAGE);
+  const paginatedMessages = useMemo(() => {
+    const start = (currentPage - 1) * MESSAGES_PER_PAGE;
+    return allMessages.slice(start, start + MESSAGES_PER_PAGE);
+  }, [allMessages, currentPage]);
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+    document
+      .getElementById("mensagens")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const renderPaginationButtons = () => {
+    const pages: (number | "ellipsis")[] = [];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (currentPage > 3) pages.push("ellipsis");
+      for (
+        let i = Math.max(2, currentPage - 1);
+        i <= Math.min(totalPages - 1, currentPage + 1);
+        i++
+      ) {
+        pages.push(i);
+      }
+      if (currentPage < totalPages - 2) pages.push("ellipsis");
+      pages.push(totalPages);
+    }
+
+    return pages.map((p, idx) =>
+      p === "ellipsis" ? (
+        <span className="px-2 text-muted-foreground" key={`ellipsis-${idx}`}>
+          …
+        </span>
+      ) : (
+        <Button
+          className={
+            currentPage === p ? "bg-primary text-primary-foreground" : ""
+          }
+          key={p}
+          onClick={() => goToPage(p)}
+          size="sm"
+          variant={currentPage === p ? "default" : "outline"}
+        >
+          {p}
+        </Button>
+      ),
+    );
+  };
 
   return (
     <section className="section" id="mensagens">
@@ -108,6 +164,7 @@ export const Messages: React.FC = () => {
         </FadeSection>
 
         <div className="max-w-4xl mx-auto">
+          {/* Form */}
           <FadeSection delay={0.2} direction="up">
             <div className="watercolor-card p-6 md:p-8 mb-12">
               <Form {...form}>
@@ -186,14 +243,16 @@ export const Messages: React.FC = () => {
             </div>
           </FadeSection>
 
+          {/* Messages List */}
           <FadeSection delay={0.3}>
             <div className="flex items-center gap-2 mb-6">
               <Heart className="w-5 h-5 text-secondary" />
               <h3 className="font-serif text-xl text-primary">
-                Mural de Mensagens ({messageCount})
+                Mural de Mensagens ({totalMessages})
               </h3>
             </div>
 
+            {/* Loading */}
             {isLoading && (
               <div className="text-center py-12">
                 <Loader2 className="w-10 h-10 animate-spin text-secondary mx-auto mb-4" />
@@ -201,6 +260,7 @@ export const Messages: React.FC = () => {
               </div>
             )}
 
+            {/* Error */}
             {!isLoading && error && (
               <div className="text-center py-12">
                 <div className="watercolor-card max-w-md mx-auto p-6">
@@ -218,25 +278,65 @@ export const Messages: React.FC = () => {
               </div>
             )}
 
-            {!isLoading && !error && messageCount === 0 && (
+            {/* Empty */}
+            {!isLoading && !error && totalMessages === 0 && (
               <div className="text-center py-12 text-muted-foreground">
                 <Heart className="w-12 h-12 mx-auto mb-4 opacity-30" />
                 <p>Seja o primeiro a deixar uma mensagem!</p>
               </div>
             )}
 
-            {!isLoading && !error && messageCount > 0 && (
-              <StaggerContainer className="grid gap-4" staggerDelay={0.1}>
-                {messages.map((msg) => (
-                  <StaggerItem key={msg.id} variants={STAGGER_VARIANT_ITEMS}>
+            {/* Messages Grid + Pagination */}
+            {!isLoading && !error && totalMessages > 0 && (
+              <>
+                <StaggerContainer className="grid gap-4" staggerDelay={0.1}>
+                  {paginatedMessages.map((msg) => (
                     <MessageCard
                       date={MessagesService.formatDate(msg.dateTime)}
+                      key={msg.id}
                       message={msg.message}
                       name={msg.name}
                     />
-                  </StaggerItem>
-                ))}
-              </StaggerContainer>
+                  ))}
+                </StaggerContainer>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-2 mt-8">
+                    <Button
+                      className="gap-1"
+                      disabled={currentPage === 1}
+                      onClick={() => goToPage(currentPage - 1)}
+                      size="sm"
+                      variant="outline"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      Anterior
+                    </Button>
+
+                    <div className="flex items-center gap-1">
+                      {renderPaginationButtons()}
+                    </div>
+
+                    <Button
+                      className="gap-1"
+                      disabled={currentPage === totalPages}
+                      onClick={() => goToPage(currentPage + 1)}
+                      size="sm"
+                      variant="outline"
+                    >
+                      Próximo
+                      <ChevronRight className="w-4 h-4" />
+                    </Button>
+                  </div>
+                )}
+
+                <p className="text-center text-xs text-muted-foreground mt-3">
+                  Mostrando {(currentPage - 1) * MESSAGES_PER_PAGE + 1}–
+                  {Math.min(currentPage * MESSAGES_PER_PAGE, totalMessages)} de{" "}
+                  {totalMessages} mensagens
+                </p>
+              </>
             )}
           </FadeSection>
         </div>
