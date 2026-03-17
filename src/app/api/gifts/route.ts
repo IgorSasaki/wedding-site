@@ -1,5 +1,5 @@
+import { NextResponse } from "next/server";
 import axios from "axios";
-import type { NextApiRequest, NextApiResponse } from "next";
 
 const AIRTABLE_API_URL = process.env.AIRTABLE_API_URL;
 const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN;
@@ -12,10 +12,7 @@ const airtableClient = axios.create({
   },
 });
 
-export default async function handler(
-  _req: NextApiRequest,
-  res: NextApiResponse,
-) {
+export async function GET() {
   try {
     const allRecords: unknown[] = [];
     let offset: string | undefined;
@@ -37,10 +34,16 @@ export default async function handler(
       };
     });
 
-    res.status(200).json(gifts);
+    return NextResponse.json(gifts);
   } catch (error: unknown) {
-    const err = error as { response?: { data?: unknown }; message?: string };
+    const err = error as {
+      response?: { data?: unknown };
+      message?: string;
+    };
     console.error("Error fetching gifts:", err.response?.data || err.message);
-    res.status(500).json({ error: "Failed to fetch gifts" });
+    return NextResponse.json(
+      { error: "Failed to fetch gifts" },
+      { status: 500 },
+    );
   }
 }

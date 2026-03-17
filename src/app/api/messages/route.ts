@@ -1,5 +1,5 @@
+import { NextResponse } from "next/server";
 import axios from "axios";
-import type { NextApiRequest, NextApiResponse } from "next";
 
 const AIRTABLE_API_URL = process.env.AIRTABLE_API_URL;
 const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN;
@@ -12,10 +12,7 @@ const airtableClient = axios.create({
   },
 });
 
-export default async function handler(
-  _req: NextApiRequest,
-  res: NextApiResponse,
-) {
+export async function GET() {
   try {
     const allRecords: unknown[] = [];
     let offset: string | undefined;
@@ -42,13 +39,46 @@ export default async function handler(
       };
     });
 
-    res.status(200).json(messages);
+    return NextResponse.json(messages);
   } catch (error: unknown) {
-    const err = error as { response?: { data?: unknown }; message?: string };
+    const err = error as {
+      response?: { data?: unknown };
+      message?: string;
+    };
     console.error(
       "Error fetching messages:",
       err.response?.data || err.message,
     );
-    res.status(500).json({ error: "Failed to fetch messages" });
+    return NextResponse.json(
+      { error: "Failed to fetch messages" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { name, message, email } = body;
+
+    const { data } = await airtableClient.post("/messages", {
+      records: [
+        {
+          fields: { name, message, email },
+        },
+      ],
+    });
+
+    return NextResponse.json(data, { status: 201 });
+  } catch (error: unknown) {
+    const err = error as {
+      response?: { data?: unknown };
+      message?: string;
+    };
+    console.error("Error creating message:", err.response?.data || err.message);
+    return NextResponse.json(
+      { error: "Failed to create message" },
+      { status: 500 },
+    );
   }
 }

@@ -1,5 +1,5 @@
+import { NextResponse } from "next/server";
 import axios from "axios";
-import type { NextApiRequest, NextApiResponse } from "next";
 
 const AIRTABLE_API_URL = process.env.AIRTABLE_API_URL;
 const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN;
@@ -12,17 +12,14 @@ const airtableClient = axios.create({
   },
 });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
 ) {
-  if (req.method !== "PATCH") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
   try {
-    const { id } = req.query;
-    const { giftedBy } = req.body;
+    const { id } = await params;
+    const body = await request.json();
+    const { giftedBy } = body;
 
     await airtableClient.patch(`/gifts/${id}`, {
       fields: {
@@ -32,10 +29,16 @@ export default async function handler(
       },
     });
 
-    res.status(200).json({ success: true });
+    return NextResponse.json({ success: true });
   } catch (error: unknown) {
-    const err = error as { response?: { data?: unknown }; message?: string };
+    const err = error as {
+      response?: { data?: unknown };
+      message?: string;
+    };
     console.error("Error updating gift:", err.response?.data || err.message);
-    res.status(500).json({ error: "Failed to update gift" });
+    return NextResponse.json(
+      { error: "Failed to update gift" },
+      { status: 500 },
+    );
   }
 }

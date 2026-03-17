@@ -32,7 +32,7 @@ O projeto foi arquitetado com foco em **segurança**, **performance** e **experi
 | Tecnologia          | Versão                 | Descrição                    |
 | ------------------- | ---------------------- | ---------------------------- |
 | **React**           | 19.x                   | Biblioteca principal de UI   |
-| **Next.js**         | 16.x                   | Framework React full-stack   |
+| **Next.js**         | 16.x                   | Framework React (App Router) |
 | **TypeScript**      | 5.9                    | Tipagem estática completa    |
 | **Tailwind CSS**    | 4.x                    | Framework de estilização     |
 | **Framer Motion**   | 12.x                   | Animações declarativas       |
@@ -68,50 +68,65 @@ O projeto foi arquitetado com foco em **segurança**, **performance** e **experi
 
 ```
 wedding-site/
-├── pages/                      # Next.js Pages Router
-│   ├── _app.tsx              # App wrapper
-│   ├── _document.tsx         # Document HTML
-│   ├── index.tsx             # Página principal
-│   └── api/                  # API Routes (Serverless)
-│       ├── messages/
-│       │   ├── index.ts      # GET messages
-│       │   └── create.ts    # POST new message
-│       └── gifts/
-│           ├── index.ts      # GET gifts
-│           └── [id].ts       # PATCH gift status
-│
-├── src/                      # Código fonte React
-│   ├── components/          # Componentes reutilizáveis
-│   │   ├── animations/      # Animações (Fade, Stagger)
-│   │   ├── ui/              # Componentes Radix UI + shadcn
-│   │   └── ...              # Navigation, Cards, etc.
+├── src/
+│   ├── app/                      # Next.js App Router
+│   │   ├── layout.tsx          # Root layout
+│   │   ├── page.tsx            # Página principal
+│   │   └── api/                # API Routes (Serverless)
+│   │       ├── messages/
+│   │       │   └── route.ts   # GET & POST messages
+│   │       └── gifts/
+│   │           ├── route.ts     # GET gifts
+│   │           └── [id]/
+│   │               └── route.ts # PATCH gift status
 │   │
-│   ├── config/              # Configurações centralizadas
-│   │   ├── siteConfig.ts    # Configurações do site
-│   │   ├── giftsConfig.ts   # Configuração de presentes
-│   │   ├── faqConfig.ts     # FAQ centralizado
-│   │   ├── timelineConfig.ts# Cronologia do casal
-│   │   └── venueConfig.ts   # Configurações do local
+│   ├── components/              # Componentes React
+│   │   ├── animations/        # Animações (Fade, Stagger)
+│   │   ├── ui/                # Componentes Radix UI + shadcn
+│   │   ├── Navigation/        # Componente de navegação
+│   │   ├── CountdownTimer/    # Timer regressivo
+│   │   ├── FAQItem/           # Item de FAQ
+│   │   ├── GiftCard/          # Card de presente
+│   │   ├── HeroHeader/        # Header com countdown
+│   │   ├── MessageCard/       # Card de mensagem
+│   │   ├── Messages/          # Seção de mensagens
+│   │   ├── OurStory/          # Nossa história
+│   │   ├── ReserveConfirm/    # Confirmação de presença
+│   │   ├── SectionTitle/      # Título de seção
+│   │   ├── TimelineItem/      # Item de timeline
+│   │   ├── WeddingDetails/    # Detalhes do casamento
+│   │   └── Gifts/             # Lista de presentes
 │   │
-│   ├── pages/               # Componentes de página
-│   │   └── Home/
-│   │       └── _components/ # Componentes da home page
+│   ├── config/                 # Configurações centralizadas
+│   │   ├── siteConfig.ts      # Configurações do site
+│   │   ├── giftsConfig.ts    # Configuração de presentes
+│   │   ├── faqConfig.ts      # FAQ centralizado
+│   │   ├── timelineConfig.ts  # Cronologia do casal
+│   │   └── venueConfig.ts     # Configurações do local
 │   │
-│   ├── services/            # Camada de API
+│   ├── services/               # Camada de API
 │   │   └── api/
-│   │       ├── client.ts    # Cliente Axios
+│   │       ├── client.ts      # Cliente Axios
 │   │       ├── MessagesService.ts
 │   │       └── GiftsService.ts
 │   │
-│   ├── hooks/              # Custom hooks
-│   ├── lib/                # Utilitários
-│   └── styles/             # Estilos globais
+│   ├── hooks/                 # Custom hooks
+│   │   ├── useToast/         # Hook de notificações
+│   │   └── UseMobile/        # Hook para detectar mobile
+│   │
+│   ├── lib/                   # Utilitários
+│   │   └── utils.ts          # Funções utilitárias
+│   │
+│   └── styles/                # Estilos globais
+│       └── global.css         # CSS global + Tailwind
 │
-├── public/                  # Arquivos estáticos
-├── next.config.ts          # Configuração Next.js
-├── tsconfig.json           # Configuração TypeScript
-├── eslint.config.js        # Configuração ESLint
-└── package.json           # Dependências e scripts
+├── public/                    # Arquivos estáticos
+├── next.config.ts             # Configuração Next.js
+├── tsconfig.json              # Configuração TypeScript
+├── eslint.config.js          # Configuração ESLint
+├── postcss.config.mjs        # Configuração PostCSS
+├── vercel.json               # Configuração Vercel
+└── package.json              # Dependências e scripts
 ```
 
 ---
