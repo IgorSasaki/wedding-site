@@ -1,4 +1,4 @@
-import { airtableClient } from "./airtableClient";
+import { apiClient } from "./client";
 
 export interface Message {
   dateTime: string;
@@ -12,49 +12,14 @@ export type CreateMessageData = Pick<Message, "name" | "message"> & {
   email?: string;
 };
 
-interface AirtableMessagesResponse {
-  offset?: string;
-  records: Array<{
-    createdTime?: string;
-    fields: Record<string, unknown>;
-    id: string;
-  }>;
-}
-
 class MessagesServiceClass {
-  private endpoint = "/messages";
-
   async getAll(): Promise<Message[]> {
-    const allRecords: Message[] = [];
-    let offset: string | undefined;
-
-    do {
-      const { data } = await airtableClient.get<AirtableMessagesResponse>(
-        this.endpoint,
-        { params: offset ? { offset } : {} },
-      );
-
-      const page = (data.records ?? []).map((r) => ({
-        ...r.fields,
-        id: r.id,
-        dateTime: r.createdTime ?? "",
-      })) as Message[];
-
-      allRecords.push(...page);
-      offset = data.offset;
-    } while (offset);
-
-    return allRecords;
+    const { data } = await apiClient.get<Message[]>("/messages");
+    return data;
   }
 
   async create(messageData: CreateMessageData): Promise<Message> {
-    const { data } = await airtableClient.post<Message>(this.endpoint, {
-      records: [
-        {
-          fields: messageData,
-        },
-      ],
-    });
+    const { data } = await apiClient.post<Message>("/messages", messageData);
     return data;
   }
 

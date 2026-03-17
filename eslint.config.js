@@ -178,6 +178,7 @@ export default [
       "node_modules/",
       "coverage/",
       "vite.config.ts",
+      "server/",
     ],
   },
 ];
