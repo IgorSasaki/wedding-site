@@ -1,3 +1,5 @@
+"use client";
+
 import { FadeSection } from "@/components/animations/FadeSection";
 import {
   StaggerContainer,

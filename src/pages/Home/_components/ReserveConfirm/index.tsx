@@ -1,3 +1,5 @@
+"use client";
+
 import { MessageCircle, Phone } from "lucide-react";
 
 import { FadeSection } from "@/components/animations/FadeSection";

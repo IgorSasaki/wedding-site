@@ -19,7 +19,10 @@ class MessagesServiceClass {
   }
 
   async create(messageData: CreateMessageData): Promise<Message> {
-    const { data } = await apiClient.post<Message>("/messages", messageData);
+    const { data } = await apiClient.post<Message>(
+      "/messages/create",
+      messageData,
+    );
     return data;
   }
 

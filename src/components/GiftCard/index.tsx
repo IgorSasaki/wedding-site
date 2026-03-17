@@ -1,3 +1,5 @@
+"use client";
+
 import { Gift as GiftIcon, Check, Loader2, Heart } from "lucide-react";
 import React, { useState } from "react";
 

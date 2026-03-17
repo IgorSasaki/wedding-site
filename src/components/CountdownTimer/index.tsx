@@ -4,6 +4,8 @@ import { SITE_CONFIG } from "@/config/siteConfig";
 
 import { TimeLeft } from "./types";
 
+const DEFAULT_TIME: TimeLeft = { days: 0, hours: 0, minutes: 0, seconds: 0 };
+
 const calculateTimeLeft = (): TimeLeft => {
   const difference = SITE_CONFIG.wedding.date.getTime() - new Date().getTime();
 
@@ -20,7 +22,8 @@ const calculateTimeLeft = (): TimeLeft => {
 };
 
 export const CountdownTimer = () => {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft);
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>(DEFAULT_TIME);
+  const isMounted = typeof window !== "undefined";
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -29,6 +32,25 @@ export const CountdownTimer = () => {
 
     return () => clearInterval(timer);
   }, []);
+
+  if (!isMounted) {
+    return (
+      <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+        <div className="flex flex-col items-center">
+          <div className="relative">
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/80 backdrop-blur-sm shadow-soft flex items-center justify-center border border-secondary/20">
+              <span className="text-2xl md:text-3xl font-serif font-semibold text-primary">
+                --
+              </span>
+            </div>
+          </div>
+          <span className="text-xs md:text-sm text-muted-foreground mt-2 uppercase tracking-wider">
+            dias
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   const timeUnits = [
     { value: timeLeft.days, label: "dias" },

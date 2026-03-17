@@ -4,14 +4,14 @@
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
 ![React](https://img.shields.io/badge/React-19-61DAFB)
-![Vite](https://img.shields.io/badge/Vite-7-646CFF)
+![Next.js](https://img.shields.io/badge/Next.js-16-000000)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC)
-![Node.js](https://img.shields.io/badge/Node.js-Express-339933)
+![Vercel](https://img.shields.io/badge/Vercel-Deploy-000000)
 ![License](https://img.shields.io/badge/License-Private-yellow)
 
 **Plataforma web completa de casamento com gestão de presentes, mensagens e RSVP**
 
-[Demo ao Vivo](#) · [Sobre o Projeto](#sobre-o-projeto) · [Tech Stack](#tech-stack) · [Arquitetura](#arquitetura) · [Getting Started](#como-executar) · [Features](#features)
+[Demo ao Vivo](#) · [Sobre o Projeto](#sobre-o-projeto) · [Tech Stack](#tech-stack) · [Arquitetura](#arquitetura) · [Getting Started](#como-executar) · [Deploy](#deploy-vercel) · [Features](#features)
 
 </div>
 
@@ -19,7 +19,7 @@
 
 ## 📋 Sobre o Projeto
 
-Este é um **site de casamento completo** desenvolvido para o casal Igor Sasaki e Isabela Mardegan. A aplicação web permite que os convidados visualizem os detalhes do evento, confiram presença, dejem mensagens no muralvirtual e escolham presentes da lista — tudo integrado com a API do **Airtable** como CMS.
+Este é um **site de casamento completo** desenvolvido para o casal Igor Sasaki e Isabela Mardegan. A aplicação web permite que os convidados visualizem os detalhes do evento, confiram presença, dejem mensagens no mural virtual e escolham presentes da lista — tudo integrado com a API do **Airtable** como CMS.
 
 O projeto foi arquitetado com foco em **segurança**, **performance** e **experiência do usuário**, demonstrando competências Full Stack em um projeto real e completo.
 
@@ -32,32 +32,30 @@ O projeto foi arquitetado com foco em **segurança**, **performance** e **experi
 | Tecnologia          | Versão                 | Descrição                    |
 | ------------------- | ---------------------- | ---------------------------- |
 | **React**           | 19.x                   | Biblioteca principal de UI   |
+| **Next.js**         | 16.x                   | Framework React full-stack   |
 | **TypeScript**      | 5.9                    | Tipagem estática completa    |
-| **Vite**            | 7.x                    | Build tool e dev server      |
 | **Tailwind CSS**    | 4.x                    | Framework de estilização     |
 | **Framer Motion**   | 12.x                   | Animações declarativas       |
 | **React Hook Form** | 7.x                    | Gerenciamento de formulários |
 | **Zod**             | 4.x                    | Validação de esquemas        |
 | **Axios**           | 1.x                    | Cliente HTTP                 |
-| **React Router**    | 7.x                    | Roteamento SPA               |
 | **Radix UI**        | Componentes acessíveis | Headless UI components       |
 | **Lucide React**    | Ícones                 | Biblioteca de ícones         |
 | **Sonner**          | Notificações           | Toast notifications          |
 
-### Backend
+### Backend (API Routes)
 
-| Tecnologia     | Versão | Descrição                     |
-| -------------- | ------ | ----------------------------- |
-| **Express.js** | 5.x    | Framework web Node.js         |
-| **Axios**      | 1.x    | Cliente HTTP para Airtable    |
-| **CORS**       | 2.x    | Cross-Origin Resource Sharing |
-| **tsx**        | 4.x    | Executador TypeScript         |
+| Tecnologia      | Versão | Descrição                  |
+| --------------- | ------ | -------------------------- |
+| **Next.js API** | 16.x   | Serverless API routes      |
+| **Axios**       | 1.x    | Cliente HTTP para Airtable |
 
 ### Infraestrutura & DevOps
 
 | Tecnologia      | Descrição                   |
 | --------------- | --------------------------- |
 | **Airtable**    | Banco de dados e CMS        |
+| **Vercel**      | Deploy & Hosting            |
 | **pnpm**        | Gerenciador de pacotes      |
 | **ESLint**      | Linting de código           |
 | **Prettier**    | Formatação de código        |
@@ -70,13 +68,19 @@ O projeto foi arquitetado com foco em **segurança**, **performance** e **experi
 
 ```
 wedding-site/
-├── server/                    # Backend API (Express.js)
-│   ├── index.ts              # Servidor principal
-│   ├── .env                 # Variáveis de ambiente (NÃO versionado)
-│   ├── .env.example         # Template de variáveis
-│   └── tsconfig.json        # Configuração TypeScript
+├── pages/                      # Next.js Pages Router
+│   ├── _app.tsx              # App wrapper
+│   ├── _document.tsx         # Document HTML
+│   ├── index.tsx             # Página principal
+│   └── api/                  # API Routes (Serverless)
+│       ├── messages/
+│       │   ├── index.ts      # GET messages
+│       │   └── create.ts    # POST new message
+│       └── gifts/
+│           ├── index.ts      # GET gifts
+│           └── [id].ts       # PATCH gift status
 │
-├── src/                      # Frontend (React + Vite)
+├── src/                      # Código fonte React
 │   ├── components/          # Componentes reutilizáveis
 │   │   ├── animations/      # Animações (Fade, Stagger)
 │   │   ├── ui/              # Componentes Radix UI + shadcn
@@ -87,9 +91,9 @@ wedding-site/
 │   │   ├── giftsConfig.ts   # Configuração de presentes
 │   │   ├── faqConfig.ts     # FAQ centralizado
 │   │   ├── timelineConfig.ts# Cronologia do casal
-│   │   └── venueConfig.ts   # Configurações dolocal
+│   │   └── venueConfig.ts   # Configurações do local
 │   │
-│   ├── pages/               # Páginas da aplicação
+│   ├── pages/               # Componentes de página
 │   │   └── Home/
 │   │       └── _components/ # Componentes da home page
 │   │
@@ -101,17 +105,12 @@ wedding-site/
 │   │
 │   ├── hooks/              # Custom hooks
 │   ├── lib/                # Utilitários
-│   ├── styles/             # Estilos globais
-│   ├── App.tsx             # Componente raiz
-│   └── main.tsx            # Entry point
+│   └── styles/             # Estilos globais
 │
 ├── public/                  # Arquivos estáticos
-├── index.html              # HTML entry
-├── vite.config.ts          # Configuração Vite
+├── next.config.ts          # Configuração Next.js
 ├── tsconfig.json           # Configuração TypeScript
 ├── eslint.config.js        # Configuração ESLint
-├── postcss.config.mjs      # Configuração PostCSS
-├── tailwind.config.js      # Configuração Tailwind (v4)
 └── package.json           # Dependências e scripts
 ```
 
@@ -125,12 +124,12 @@ O token da API do Airtable estava **exposto no frontend**, sendo possível extra
 
 ### Solução Implementada
 
-Arquitetura **Backend-for-Frontend (BFF)** com proxy de API:
+Arquitetura **Backend-for-Frontend (BFF)** usando Next.js API Routes (Serverless Functions):
 
 ```
 ┌─────────────────┐         ┌──────────────────┐         ┌─────────────┐
-│   Navegador    │ ──────► │   Servidor API   │ ──────► │  Airtable   │
-│  (React App)   │         │   (Express.js)   │         │   (Base)    │
+│   Navegador    │ ──────► │  Next.js API     │ ──────► │  Airtable   │
+│  (React App)   │         │  (Serverless)    │         │   (Base)    │
 │                │         │                  │         │             │
 │ ❌ Sem token   │         │ ✅ Token aqui    │         │ 🔒 API Key  │
 │ ❌ Dados       │         │ ✅ Proxy requests│         │ ✅ Dados    │
@@ -140,9 +139,104 @@ Arquitetura **Backend-for-Frontend (BFF)** com proxy de API:
 **Benefícios:**
 
 - Token **nunca** exposto ao cliente
-- Validação de requisições no backend
-- CORS configurado para permitir apenasorigem do frontend
+- API Routes rodam no servidor (serverless)
+- Sem necessidade de servidor dedicado
+- Escalabilidade automática do Vercel
 - Logging centralizado de erros
+
+---
+
+## 🚀 Como Executar
+
+### Pré-requisitos
+
+- Node.js 18+
+- pnpm 8+
+- Conta no Airtable (para configuração)
+
+### Configuração
+
+1. **Clone o repositório:**
+
+```bash
+git clone https://github.com/IgorSasaki/wedding-site
+cd wedding-site
+```
+
+2. **Instale as dependências:**
+
+```bash
+pnpm install
+```
+
+3. **Configure as variáveis de ambiente:**
+
+Crie o arquivo `.env.local`:
+
+```env
+AIRTABLE_API_URL=https://api.airtable.com/v0/appXXXXXXXXXXXXXX
+AIRTABLE_TOKEN=patXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+4. **Execute o desenvolvimento:**
+
+```bash
+pnpm run dev
+```
+
+5. **Acesse:**
+
+- Frontend: http://localhost:3000
+
+### Build para Produção
+
+```bash
+pnpm run build
+```
+
+---
+
+## ☁️ Deploy na Vercel
+
+### Deploy Automático
+
+1. **Fork este repositório** para sua conta do GitHub
+
+2. **Acesse [Vercel.com](https://vercel.com)** e faça login
+
+3. **Clique em "Add New..."** → "Project"
+
+4. **Importe seu repositório** forkado
+
+5. **Configure as variáveis de ambiente** em "Environment Variables":
+
+| Nome               | Valor                                           |
+| ------------------ | ----------------------------------------------- |
+| `AIRTABLE_API_URL` | `https://api.airtable.com/v0/appXXXXXXXXXXXXXX` |
+| `AIRTABLE_TOKEN`   | `patXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`              |
+
+6. **Clique em "Deploy"**
+
+### Deploy via CLI
+
+```bash
+# Instale a CLI do Vercel
+npm i -g vercel
+
+# Faça login
+vercel login
+
+# Deploy
+vercel
+```
+
+### Configurações de Build (Vercel)
+
+O Vercel detecta automaticamente Next.js. As configurações padrão funcionam:
+
+- **Build Command:** `pnpm run build`
+- **Output Directory:** `.next`
+- **Install Command:** `pnpm install`
 
 ---
 
@@ -192,6 +286,7 @@ Arquitetura **Backend-for-Frontend (BFF)** com proxy de API:
 - **Paginação** de mensagens
 - **Configuração centralizada** via arquivos TypeScript
 - **Componentes acessíveis** (Radix UI)
+- **API Routes Serverless** no Vercel
 
 ---
 
@@ -223,95 +318,31 @@ Arquitetura **Backend-for-Frontend (BFF)** com proxy de API:
 
 ---
 
-## 🚀 Como Executar
-
-### Pré-requisitos
-
-- Node.js 18+
-- pnpm 8+
-- Conta no Airtable (para configuração)
-
-### Configuração
-
-1. **Clone o repositório:**
-
-```bash
-git clone [<repo-url>](https://github.com/IgorSasaki/wedding-site)
-cd wedding-site
-```
-
-2. **Instale as dependências:**
-
-```bash
-pnpm install
-```
-
-3. **Configure as variáveis de ambiente:**
-
-Crie o arquivo `server/.env`:
-
-```env
-AIRTABLE_API_URL=https://api.airtable.com/v0/appXXXXXXXXXXXXXX
-AIRTABLE_TOKEN=patXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-PORT=3001
-```
-
-4. **Execute o desenvolvimento (ambos servidores):**
-
-```bash
-pnpm run dev:all
-```
-
-Ou separadamente:
-
-```bash
-# Terminal 1 - Backend
-pnpm run server
-
-# Terminal 2 - Frontend
-pnpm run dev
-```
-
-5. **Acesse:**
-
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:3001/api
-
-### Build para Produção
-
-```bash
-# Frontend
-pnpm run build
-
-# Servidor (precisa compilar para JavaScript)
-npx tsc -p server/tsconfig.json
-```
-
----
-
 ## 📝 Decisões Técnicas
 
-### Por que essa arquitetura?
+### Por que Next.js + Vercel?
 
-1. **Airtable como CMS**
+1. **API Routes Serverless**
+   - Sem necessidade de servidor dedicado
+   - Escalabilidade automática
+   - Custo zero para início (tier gratuito)
+   - Token da API protegido no backend
+
+2. **Airtable como CMS**
    - Permite que os noivos editem conteúdo sem código
    - Interface amigável para gerenciamento
    - API REST simples
-
-2. **Proxy de API no backend**
-   - Resolve vulnerabilidade de segurança com token exposto
-   - Demonstra conhecimento de arquitetura BFF
-   - Facilita futuras validações e cache
 
 3. **Tailwind CSS v4**
    - Nova versão com CSS-first configuration
    - Performance superior
    - DX moderno
 
-4. **React 19 + Vite 7**
+4. **React 19 + Next.js 16**
    - Latest stable das tecnologias
-   - React Compiler para otimizações
-   - Hot Module Replacement rápido
+   - App Router ou Pages Router
+   - Server Components (opcional)
+   - Static & Dynamic Rendering
 
 5. **Radix UI + shadcn pattern**
    - Componentes headless e acessíveis
@@ -322,16 +353,15 @@ npx tsc -p server/tsconfig.json
 
 ## 🔧 Scripts Disponíveis
 
-| Script                | Descrição                    |
-| --------------------- | ---------------------------- |
-| `pnpm run dev`        | Inicia frontend (Vite)       |
-| `pnpm run server`     | Inicia backend (Express)     |
-| `pnpm run dev:all`    | Inicia ambos simultaneamente |
-| `pnpm run build`      | Build de produção            |
-| `pnpm run lint`       | Linting com auto-fix         |
-| `pnpm run lint:check` | Linting apenas               |
-| `pnpm run format`     | Formatação Prettier          |
-| `pnpm run commit`     | Conventional commits         |
+| Script                | Descrição              |
+| --------------------- | ---------------------- |
+| `pnpm run dev`        | Inicia desenvolvimento |
+| `pnpm run build`      | Build de produção      |
+| `pnpm run start`      | Inicia produção        |
+| `pnpm run lint`       | Linting com auto-fix   |
+| `pnpm run lint:check` | Linting apenas         |
+| `pnpm run format`     | Formatação Prettier    |
+| `pnpm run commit`     | Conventional commits   |
 
 ---
 
@@ -339,11 +369,11 @@ npx tsc -p server/tsconfig.json
 
 - [ ] Autenticação para área administrativa
 - [ ] Upload de fotos dos noivos
-- [ ] Lista de حضور (RSVP) online
-- [ ] Cache Redis no backend
+- [ ] Lista de RSVP online
+- [ ] Cache com Redis/ISR
 - [ ] Rate limiting na API
-- [ ] Deploy automatizado (Vercel + Railway)
 - [ ] PWA para funcionamento offline
+- [ ] Analytics e monitoramento
 
 ---
 

@@ -1,13 +1,10 @@
-@import url("https://fonts.googleapis.com");
-@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lato:wght@300;400;500;600;700&display=swap");
-
 @import "tailwindcss";
 
 @theme {
   /* Fonte customizadas */
-  --font-sans: "Lato";
-  --font-serif: "Playfair Display";
-  --font-script: "Great Vibes";
+  --font-sans: "Lato", sans-serif;
+  --font-serif: "Playfair Display", serif;
+  --font-script: "Great Vibes", cursive;
 
   /* Border radius */
   --radius-sm: calc(var(--radius) - 4px);

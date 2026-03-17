@@ -1,3 +1,5 @@
+"use client";
+
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Calendar, Gift } from "lucide-react";
 import React, { useRef } from "react";
