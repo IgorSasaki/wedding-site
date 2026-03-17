@@ -10,7 +10,6 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Igor & Isabela - Casamento</title>
         <title>Igor & Isabela - Nosso casamento em 25 de julho de 2026</title>
         <meta
           content="Estamos preparando o grande dia: o casamento de Igor e Isabela, em 25 de julho de 2026, em Araraquara. Aqui você encontra nossa história, informações da cerimônia e recepção, lista de presentes e um espaço para deixar seu carinho."
@@ -22,7 +21,7 @@ export default function App({ Component, pageProps }: AppProps) {
           property="og:title"
         />
         <meta
-          content="Conheça nossa história, veja os detalhes da cerimônia e da recepção, acesse a lista de presentes e deixe uma mensagem especial para nós."
+          content="Conheça nossa história, veja os detalhes da cerimônia e da recepção, acesso a lista de presentes e deixe uma mensagem especial para nós."
           property="og:description"
         />
         <meta
@@ -37,7 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <TooltipProvider>
         <Sonner />
-        <Component {...pageProps} />
+        <Component {...pageProps} suppressHydrationWarning />
       </TooltipProvider>
     </>
   );

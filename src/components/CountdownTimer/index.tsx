@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+/* eslint-disable react-hooks/refs */
+import { useEffect, useRef, useState } from "react";
 
 import { SITE_CONFIG } from "@/config/siteConfig";
 
@@ -21,19 +22,28 @@ const calculateTimeLeft = (): TimeLeft => {
   return { days: 0, hours: 0, minutes: 0, seconds: 0 };
 };
 
+const mountedRef = { current: false };
+
 export const CountdownTimer = () => {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(DEFAULT_TIME);
-  const isMounted = typeof window !== "undefined";
+  const timeLeftRef = useRef<TimeLeft>(DEFAULT_TIME);
+  const [, forceRender] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
+    mountedRef.current = true;
+
+    const updateTime = () => {
+      timeLeftRef.current = calculateTimeLeft();
+      forceRender((n) => n + 1);
+    };
+
+    updateTime();
+
+    const timer = setInterval(updateTime, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
-  if (!isMounted) {
+  if (!mountedRef.current) {
     return (
       <div className="flex flex-wrap justify-center gap-4 md:gap-6">
         <div className="flex flex-col items-center">
@@ -53,10 +63,10 @@ export const CountdownTimer = () => {
   }
 
   const timeUnits = [
-    { value: timeLeft.days, label: "dias" },
-    { value: timeLeft.hours, label: "horas" },
-    { value: timeLeft.minutes, label: "min" },
-    { value: timeLeft.seconds, label: "seg" },
+    { value: timeLeftRef.current.days, label: "dias" },
+    { value: timeLeftRef.current.hours, label: "horas" },
+    { value: timeLeftRef.current.minutes, label: "min" },
+    { value: timeLeftRef.current.seconds, label: "seg" },
   ];
 
   return (
