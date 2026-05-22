@@ -48,6 +48,11 @@ export const FAQ_CONFIG: FAQItem[] = [
       "Nossa lista de presentes está disponível aqui mesmo no site, na seção 'Lista de Presentes'. Você encontrará itens variados que vão fazer parte do nosso novo lar. Mas lembre-se: sua presença e suas orações já são nosso maior presente!",
   },
   {
+    id: "entrega",
+    question: "Onde posso entregar o presente?",
+    answer: "Ficamos muito felizes com sua generosidade! ❤️ Se você optou por comprar um presente online, pode enviar diretamente para nosso apartamento no endereço Av. Dom Carlos Carmelo, 853 - Bloco 11 - Apto. 402 - Jardim Botânico. Caso prefira nos entregar pessoalmente, ficaremos igualmente felizes em receber de suas mãos! Entre em contato conosco para combinarmos o melhor momento."
+  },
+  {
     id: "confirmacao",
     question: "Como confirmo minha presença?",
     answer:
